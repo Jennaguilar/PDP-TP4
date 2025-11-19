@@ -1,0 +1,85 @@
+Aplicando lo Aprendido 4
+
+ToDo List con Paradigma Funcional
+
+Objetivos que se deben cumplir en este tp:
+•funciones puras
+•inmutabilidad
+•funciones de orden superior
+•composición(pipe)
+•evitar bucles
+•separar codigo puro/impuro
+•persistencia
+
+INMUTABILIDAD
+se crea una copia nueva con los cambios
+Spread operator [...lista] → copia la lista.
+
+
+FUNCIONES PURAS
+Una función pura:
+•siempre devuelve lo mismo con los mismos datos
+•no modifica nada por fuera
+•no usa console, prompt ni archivos
+los que utilice son:
+filtrarTitulo(txt)
+ordenarPorFecha(lista)
+actualizarTarea(lista, titulo, cambios)
+
+
+FUNCIONES ORDEN SUPERIOR HOF
+funciones que reciben funciones o devuelven funciones.
+Ejemplos que utilice:
+filtrarTitulo("hola") (lista)
+filtrarEstados("Pendiente") (lista)
+
+
+PIPE COMPOSICION
+pipe sirve para encadenar funciones puras:
+const procesar = pipe(
+    filtrarTitulo("hola"),
+    ordenarPorFecha
+);
+Significa que:
+Se filtra por titulo, Luego ordenar por fecha
+Todo en una sola funcion.
+
+
+
+REMPLAZO DE BUCLES 
+No utilice for y tampoco while
+los remplace por las funciones:
+•.map()
+•.filter()
+•.sort()
+•.reduce() dentro de pipe
+(obligatorias estas funciones en programacion funcional)
+
+SEPARACION DE PURAS E IMPURAS 
+•Puras → puras.ts
+No usan console
+No usan prompt
+No escriben archivos
+No dependen de variables externas
+
+•Impuras → main.ts ((menu/prompt)), utils.ts (impresion) y utilsPersistencia.ts(guardar/cargar archivo)
+Lectura del usuario
+Escritura JSON
+Console.log
+Mutación del menú
+
+PERSISTENCIA ✨
+Se guarda el estado de las tareas en un archivo tareas.json,
+pero sin romper la programación funcional.
+guardar(lista)
+cargar()
+
+
+
+CICLO FUNCIONAL
+[1]El usuario crea una tarea (impuro)
+[2]crearTarea() devuelve un objeto inmutable(puro)
+[3]agregarTarea() devuelve una NUEVA lista (puro)
+[4]guardar() escribe la lista en JSON (impuro)
+
+

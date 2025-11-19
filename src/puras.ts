@@ -26,6 +26,10 @@ export const ordenarPorDificultad = (lista: readonly Tarea[])=>
 [...lista].sort((a, b) => a.dificultad.localeCompare(b.dificultad));
 
 
+export const ordenarPorEstado = (lista: readonly Tarea[]) =>
+    [...lista].sort((a, b) => a.estado.localeCompare(b.estado));
+
+
 // === ACTUALIZAR TAREA INMUTABLE ===
 export const actualizarTarea = (
     lista: readonly Tarea[],
@@ -51,4 +55,3 @@ export const pipe =
         fns.reduce((acc, fn) => fn(acc), valor);
 
     // pipe: permite encadenar varias funciones mas clara de leer
-    

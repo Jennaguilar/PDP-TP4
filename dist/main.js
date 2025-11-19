@@ -7,10 +7,12 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const prompt_sync_1 = __importDefault(require("prompt-sync"));
 const prompt = (0, prompt_sync_1.default)();
 const models_1 = require("./models");
+const utilsPersistencia_1 = require("./utilsPersistencia");
 const puras_1 = require("./puras");
 const utils_1 = require("./utils");
+const puras_2 = require("./puras");
 // === Lista INMUTABLE ===
-let listaTareas = [];
+let listaTareas = (0, utilsPersistencia_1.cargar)();
 function menu() {
     let opcion;
     // === MENU PRINCIPAL === 
@@ -23,6 +25,8 @@ function menu() {
         console.log("[5] Ordenar por fecha");
         console.log("[6] Ordenar por dificultad");
         console.log("[7] Actualizar tarea");
+        console.log("[8] Filtrar + Ordenar(pipe)");
+        console.log("[9] Ordenar por estado");
         console.log("[0] Salir del menu");
         opcion = prompt("Elige una opcion: ");
         switch (opcion) {
@@ -42,16 +46,31 @@ function menu() {
                 else {
                     dificultad = "Medio";
                 }
+                const venc = prompt("Vencimiento (AAAA-MM-DD) o vacío: ");
+                const fechaVenc = venc ? new Date(venc) : undefined;
                 const nuevaTarea = (0, models_1.crearTarea)(titulo, descripcion, dificultad);
                 listaTareas = (0, puras_1.agregarTarea)(listaTareas, nuevaTarea);
+                (0, utilsPersistencia_1.guardar)(listaTareas);
                 console.log("Tarea agregada correctamente!☻");
                 break;
             case "2":
                 (0, utils_1.impLista)(listaTareas);
                 break;
             case "3":
-                const est = prompt("Estado: [ Penndiente | En Curso | Terminada | Cancelada ]: ");
-                (0, utils_1.impLista)((0, puras_1.filtrarEstados)(est)(listaTareas));
+                let estado;
+                const estInput = prompt("Estado [Pendiente-En Curso-Terminada-Cancelada]: ")
+                    .trim()
+                    .toLowerCase();
+                if (estInput === "pendiente")
+                    estado = "Pendiente";
+                else if (estInput === "en curso")
+                    estado = "En Curso";
+                else if (estInput === "terminada")
+                    estado = "Terminada";
+                else if (estInput === "cancelada")
+                    estado = "Cancelada";
+                else
+                    estado = "Pendiente";
                 break;
             case "4":
                 const txt = prompt("Texto del titulo: ");
@@ -67,7 +86,16 @@ function menu() {
                 const t = prompt("Titulo de la tarea en actualizar: ");
                 const nuevoEstado = prompt("Nuevo Estado de tarea: ");
                 listaTareas = (0, puras_1.actualizarTarea)(listaTareas, t, { estado: nuevoEstado });
+                (0, utilsPersistencia_1.guardar)(listaTareas);
                 console.log("Tarea Actualizada.");
+                break;
+            case "8":
+                const criterio = prompt("Texto del título para filtrar y ordenar por fecha: ");
+                const procesar = (0, puras_1.pipe)((0, puras_1.filtrarTitulo)(criterio), puras_1.ordenarPorFecha);
+                (0, utils_1.impLista)(procesar(listaTareas));
+                break;
+            case "9":
+                (0, utils_1.impLista)((0, puras_2.ordenarPorEstado)(listaTareas));
                 break;
             case "0":
                 return;

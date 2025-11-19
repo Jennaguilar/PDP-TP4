@@ -1,7 +1,7 @@
 "use strict";
 //puras.ts
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.pipe = exports.actualizarTarea = exports.ordenarPorDificultad = exports.ordenarPorFecha = exports.filtrarTitulo = exports.filtrarEstados = exports.agregarTarea = void 0;
+exports.pipe = exports.actualizarTarea = exports.ordenarPorEstado = exports.ordenarPorDificultad = exports.ordenarPorFecha = exports.filtrarTitulo = exports.filtrarEstados = exports.agregarTarea = void 0;
 //creamos una lista nueva
 // agregar tareas : puro
 const agregarTarea = (lista, nueva) => [...lista, nueva];
@@ -20,6 +20,8 @@ exports.ordenarPorFecha = ordenarPorFecha;
 //pura
 const ordenarPorDificultad = (lista) => [...lista].sort((a, b) => a.dificultad.localeCompare(b.dificultad));
 exports.ordenarPorDificultad = ordenarPorDificultad;
+const ordenarPorEstado = (lista) => [...lista].sort((a, b) => a.estado.localeCompare(b.estado));
+exports.ordenarPorEstado = ordenarPorEstado;
 // === ACTUALIZAR TAREA INMUTABLE ===
 const actualizarTarea = (lista, titulo, cambios) => lista.map(t => t.titulo === titulo
     ? Object.freeze(Object.assign(Object.assign(Object.assign({}, t), cambios), { ultimaEdicion: new Date() }))
